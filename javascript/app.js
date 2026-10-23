@@ -15,7 +15,9 @@ var S=EN?{
  asstRes:'Models that may suit you',asstIntro:'These are general suggestions based on your answers. Compare versions and read each vehicle page before deciding.',
  asstMix:'If you will drive on mixed roads, check on the vehicle page whether the version you want has 4x4 or AWD.',
  asstTierra:'For dirt roads, check 4x4 traction and ground clearance on the vehicle page, and ask a mechanic before deciding.',
- icsSummary:'Vehicle maintenance check',icsDesc:'Checklist: '
+ icsSummary:'Vehicle maintenance check',icsDesc:'Checklist: ',
+ toastFavOn:'Saved to favorites',toastFavOff:'Removed from favorites',toastNote:'Note saved',toastIcs:'Reminder downloaded',
+ statModels:'models in the catalog',statCats:'categories'
 }:{
  close:'Cerrar',about:'Sobre el vehículo',use:'Uso en El Salvador',share:'Compartir por WhatsApp',
  wa:'Mira este vehículo en Autos SV: ',
@@ -30,7 +32,9 @@ var S=EN?{
  asstRes:'Modelos que te pueden servir',asstIntro:'Son sugerencias generales según tus respuestas. Compara versiones y lee la ficha de cada vehículo antes de decidir.',
  asstMix:'Si vas a usar caminos mixtos, revisa en la ficha si la versión que te interesa tiene tracción 4x4 o AWD.',
  asstTierra:'Para caminos de tierra, revisa en la ficha la tracción 4x4 y la altura libre al suelo, y consulta con un mecánico antes de decidir.',
- icsSummary:'Revisión de mantenimiento del vehículo',icsDesc:'Revisar: '
+ icsSummary:'Revisión de mantenimiento del vehículo',icsDesc:'Revisar: ',
+ toastFavOn:'Guardado en favoritos',toastFavOff:'Quitado de favoritos',toastNote:'Nota guardada',toastIcs:'Recordatorio descargado',
+ statModels:'vehículos en el catálogo',statCats:'categorías'
 };
 /* Fotos adicionales por modelo: { 'Nombre del modelo': ['../img/archivo.jpg', ...] } */
 var EXTRA_PHOTOS={};
@@ -74,20 +78,26 @@ function show(m){
  $('#x').onclick=function(){dg.close()};
  var fv=$('#fv');
  var paintFav=function(){var on=isFav(m[0]);fv.textContent=on?S.favOn:S.favOff;fv.setAttribute('aria-pressed',on?'true':'false')};
- fv.onclick=function(){toggleFav(m[0]);paintFav();if(pg==='buscar')draw()};
+ fv.onclick=function(){toggleFav(m[0]);paintFav();toast(isFav(m[0])?S.toastFavOn:S.toastFavOff);if(pg==='buscar')draw()};
  paintFav();
  $('#pr').onclick=function(){window.print()};
  $('#cl').onclick=function(){
   var b=this,u=shareUrl(m[0]);
-  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(u).then(function(){b.textContent=S.copied},function(){window.prompt(S.copyPrompt,u)})}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(u).then(function(){b.textContent=S.copied;toast(S.copied)},function(){window.prompt(S.copyPrompt,u)})}
   else window.prompt(S.copyPrompt,u);
  };
  var nt=$('#nt');
  nt.value=getNotes()[m[0]]||'';
  nt.oninput=function(){var o=getNotes();if(nt.value.trim())o[m[0]]=nt.value;else delete o[m[0]];saveJSON('notas',o)};
+ nt.onchange=function(){toast(S.toastNote)};
  document.querySelectorAll('.th').forEach(function(b){b.onclick=function(){$('#bigimg').src=b.getAttribute('data-src')}});
+ var im=dg.querySelector('.im'),tx0=null;
+ im.addEventListener('touchstart',function(e){tx0=e.touches[0].clientX},{passive:true});
+ im.addEventListener('touchend',function(e){if(tx0===null)return;var dx=e.changedTouches[0].clientX-tx0;tx0=null;if(Math.abs(dx)>50)cycle(dx<0?1:-1)},{passive:true});
 }
+function cycle(step){var ths=dg.querySelectorAll('.th');if(ths.length<2)return;var cur=$('#bigimg').getAttribute('src'),i=0;ths.forEach(function(b,k){if(b.getAttribute('data-src')===cur)i=k});ths[(i+step+ths.length)%ths.length].click()}
 dg.addEventListener('click',function(e){if(e.target===dg)dg.close()});
+document.addEventListener('keydown',function(e){if(!dg.hasAttribute('open'))return;if(e.key==='ArrowRight')cycle(1);if(e.key==='ArrowLeft')cycle(-1)});
 dg.addEventListener('close',function(){if(pg==='buscar')renderRecent()});
 if(P){document.querySelectorAll('.card.m[data-i]').forEach(function(b){b.onclick=function(){show(P.m[+b.getAttribute('data-i')])}})}
 
@@ -110,6 +120,15 @@ var nz=function(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u03
 var ALL=EN?'All':'Todas',OTHER=EN?'Other':'Otros';
 var BR={'La Tóxica 413':'Blue Bird','Volquetas':OTHER,'Trailers':OTHER,'Bicicletas':OTHER,'Cuadrimoto':OTHER,'Moto cruiser':OTHER};
 var brand=function(n){return BR[n]||(/^Blue Bird/.test(n)?'Blue Bird':n.split(' ')[0])};
+function hl(text,q){
+ if(!q)return esc(text);
+ var map=[],norm='';
+ for(var i=0;i<text.length;i++){var n=text[i].toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');for(var j=0;j<n.length;j++){norm+=n[j];map.push(i)}}
+ var at=norm.indexOf(q);
+ if(at<0)return esc(text);
+ var a=map[at],b=map[at+q.length-1]+1;
+ return esc(text.slice(0,a))+'<mark>'+esc(text.slice(a,b))+'</mark>'+esc(text.slice(b));
+}
 var L=[],q='',bf=ALL,res=$('#res'),ch=$('#chips'),inp=$('#q'),cnt=$('#cnt'),so=$('#so');
 Object.keys(C).forEach(function(k){C[k].m.forEach(function(m){L.push({m:m,c:C[k].t,b:brand(m[0])})})});
 var bs=[ALL];L.forEach(function(x){if(bs.indexOf(x.b)<0)bs.push(x.b)});bs=[ALL].concat(bs.slice(1).sort(function(p,q){return p===OTHER?1:q===OTHER?-1:p.localeCompare(q)}));
@@ -122,7 +141,7 @@ function ordered(list){
  return list;
 }
 function draw(){res.innerHTML='';var n=0;
-ordered(L).forEach(function(x){if((bf===ALL||(bf===S.favChip?isFav(x.m[0]):x.b===bf))&&nz(x.m[0]+' '+x.m[1]+' '+x.c).indexOf(q)>-1){n++;var e=document.createElement('button');e.type='button';e.className='card m';e.innerHTML='<div class=\"pw\"><img class=\"ph'+(T[x.m[0]]?' ct':'')+'\" alt=\"'+alt(x.m[0])+'\" src=\"'+F[x.m[0]]+'\"></div><h3>'+x.m[0]+'</h3><p>'+x.m[1]+'</p><span class=\"tag\">'+x.c+'</span>';e.onclick=function(){show(x.m)};res.appendChild(e)}});
+ordered(L).forEach(function(x){if((bf===ALL||(bf===S.favChip?isFav(x.m[0]):x.b===bf))&&nz(x.m[0]+' '+x.m[1]+' '+x.c).indexOf(q)>-1){n++;var e=document.createElement('button');e.type='button';e.className='card m';e.innerHTML='<div class=\"pw\"><img class=\"ph'+(T[x.m[0]]?' ct':'')+'\" alt=\"'+alt(x.m[0])+'\" src=\"'+F[x.m[0]]+'\"></div><h3>'+hl(x.m[0],q)+'</h3><p>'+x.m[1]+'</p><span class=\"tag\">'+x.c+'</span>';e.onclick=function(){show(x.m)};res.appendChild(e)}});
 cnt.textContent=n?(n+' '+(n===1?S.one:S.many)):(bf===S.favChip?S.favNone:S.none)}
 inp.addEventListener('input',function(){q=nz(inp.value.trim());draw()});
 if(so)so.addEventListener('change',draw);
@@ -154,6 +173,7 @@ if(pg==='asistente'||pg==='assistant'){
   if(auto&&terreno==='tierra')h+='<p class=\"note\">'+S.asstTierra+'</p>';
   h+='<div class=\"grid\">'+items.map(function(x){return '<button type=\"button\" class=\"card m\" data-n=\"'+esc(x.m[0])+'\"><div class=\"pw\"><img class=\"ph'+(T[x.m[0]]?' ct':'')+'\" alt=\"'+alt(x.m[0])+'\" src=\"'+F[x.m[0]]+'\"></div><h3>'+x.m[0]+'</h3><p>'+x.m[1]+'</p><span class=\"tag\">'+x.c+'</span></button>'}).join('')+'</div>';
   asr.innerHTML=h;asr.hidden=false;
+  asr.querySelectorAll('.card.m').forEach(function(c,k){c.style.setProperty('--i',k)});
   asr.querySelectorAll('.card.m').forEach(function(b){b.onclick=function(){var f=findEntry(b.getAttribute('data-n'));if(f)show(f.m)}});
   asr.scrollIntoView({behavior:'smooth',block:'start'});
  });
@@ -177,6 +197,7 @@ if(pg==='mantenimiento'||pg==='maintenance'){
   var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=EN?'vehicle-maintenance.ics':'mantenimiento-autos-sv.ics';
   document.body.appendChild(a);a.click();
   setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1000);
+  toast(S.toastIcs);
  });
 }
 
@@ -220,3 +241,95 @@ if(P&&grid){
  var f=findEntry(n);
  if(f)show(f.m);
 })();
+
+/* ===== Interfaz dinámica ===== */
+
+/* Aviso breve que confirma acciones (favoritos, enlace copiado, nota guardada) */
+var toastEl=document.createElement('div');toastEl.className='toast';toastEl.setAttribute('role','status');toastEl.setAttribute('aria-live','polite');
+document.body.appendChild(toastEl);
+var toastT=null;
+function toast(msg){
+ toastEl.textContent=msg;toastEl.classList.add('on');
+ clearTimeout(toastT);toastT=setTimeout(function(){toastEl.classList.remove('on')},2200);
+}
+
+/* Barra de progreso de lectura */
+var prog=document.createElement('div');prog.className='prog';prog.setAttribute('aria-hidden','true');
+document.body.appendChild(prog);
+var progRaf=0;
+function paintProg(){
+ var h=document.documentElement,max=h.scrollHeight-h.clientHeight;
+ prog.style.transform='scaleX('+(max>0?Math.min(1,window.scrollY/max):0)+')';
+ progRaf=0;
+}
+window.addEventListener('scroll',function(){if(!progRaf)progRaf=requestAnimationFrame(paintProg)},{passive:true});
+paintProg();
+
+/* Inclinación 3D y luz que sigue el cursor en las tarjetas (solo con mouse y sin animaciones reducidas) */
+var fine=window.matchMedia&&matchMedia('(hover: hover) and (pointer: fine)').matches;
+if(fine&&!reduce){
+ document.addEventListener('pointermove',function(e){
+  var c=e.target.closest&&e.target.closest('.card.m');
+  if(!c||c.closest('dialog'))return;
+  var r=c.getBoundingClientRect();
+  var x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+  c.style.setProperty('--mx',(x*100)+'%');
+  c.style.setProperty('--my',(y*100)+'%');
+  c.style.setProperty('--ry',((x-.5)*10)+'deg');
+  c.style.setProperty('--rx',((.5-y)*8)+'deg');
+ });
+ document.addEventListener('pointerout',function(e){
+  var c=e.target.closest&&e.target.closest('.card.m');
+  if(c&&!c.contains(e.relatedTarget)){c.style.removeProperty('--rx');c.style.removeProperty('--ry')}
+ });
+}
+
+/* Contadores animados en la portada */
+var stats=document.querySelectorAll('[data-stat]');
+if(stats.length){
+ var total=0,cats=Object.keys(C).length;
+ Object.keys(C).forEach(function(k){total+=C[k].m.length});
+ var target={models:total,cats:cats};
+ var countUp=function(el){
+  var end=target[el.getAttribute('data-stat')]||0;
+  if(reduce){el.textContent=end;return}
+  var t0=null;
+  var step=function(ts){if(!t0)t0=ts;var p=Math.min(1,(ts-t0)/1100);el.textContent=Math.round(end*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(step)};
+  requestAnimationFrame(step);
+ };
+ if('IntersectionObserver' in window){
+  var so2=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){countUp(e.target);so2.unobserve(e.target)}})},{threshold:.5});
+  stats.forEach(function(el){so2.observe(el)});
+ }else{stats.forEach(countUp)}
+}
+
+/* Fondo de la portada: fotos de vehículos que se alternan */
+var heroSl=document.querySelector('.hero .slides');
+if(heroSl){
+ var HERO=['Toyota Hilux','Honda CR-V','Toyota Hiace','Kia Rio'];
+ HERO.forEach(function(n,k){
+  var im=document.createElement('img');im.src=F[n];im.alt='';im.setAttribute('aria-hidden','true');
+  if(k===0)im.className='on';
+  heroSl.appendChild(im);
+ });
+ if(!reduce){
+  var slides=heroSl.querySelectorAll('img'),cur=0,timer=null;
+  var go=function(){slides[cur].classList.remove('on');cur=(cur+1)%slides.length;slides[cur].classList.add('on')};
+  var start=function(){if(!timer)timer=setInterval(go,4200)};
+  var stop=function(){clearInterval(timer);timer=null};
+  start();
+  var hero=document.querySelector('.hero');
+  hero.addEventListener('mouseenter',stop);
+  hero.addEventListener('mouseleave',start);
+ }
+}
+
+/* Atajo: la tecla / enfoca el buscador */
+document.addEventListener('keydown',function(e){
+ if(e.key!=='/'||e.ctrlKey||e.metaKey||e.altKey)return;
+ var t=e.target,tag=t&&t.tagName;
+ if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT'||(t&&t.isContentEditable)||dg.hasAttribute('open'))return;
+ var s=document.querySelector('input[type=search]');
+ if(!s)return;
+ e.preventDefault();s.focus();
+});

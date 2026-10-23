@@ -37,8 +37,10 @@ h2{font-size:clamp(28px,4vw,42px);line-height:1.15;letter-spacing:.01em;margin-b
 .card h3{font-size:21px;line-height:1.3;letter-spacing:.02em;margin-bottom:8px}
 .card p{margin:0;color:var(--ash)}
 .tag{display:inline-block;margin-top:20px;padding:4px 12px;border:1px solid var(--slate);border-radius:40px;font-size:12px;letter-spacing:.01em;color:var(--ash)}
-.card.m{display:block;width:100%;border:0;text-align:left;font:inherit;color:inherit;cursor:pointer;text-decoration:none;transition:transform .3s ease,background .3s ease}
-.card.m:hover,.card.m:focus-visible{transform:translateY(-8px);background:var(--obsidian)}
+.card.m{display:block;width:100%;border:0;text-align:left;font:inherit;color:inherit;cursor:pointer;text-decoration:none;position:relative;overflow:hidden;transform:translateY(var(--lift,0px)) perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .3s ease,background .3s ease}
+.card.m::after{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(360px circle at var(--mx,50%) var(--my,50%),rgba(82,102,235,.22),transparent 60%);opacity:0;transition:opacity .3s ease;pointer-events:none}
+.card.m:hover,.card.m:focus-visible{--lift:-8px;background:var(--obsidian)}
+.card.m:hover::after,.card.m:focus-visible::after{opacity:1}
 .pw{overflow:hidden;border-radius:8px;margin-bottom:20px}
 .ph{width:100%;aspect-ratio:3/2;object-fit:cover;display:block;background:var(--obsidian);transition:transform .5s ease}
 .card.m:hover .ph,.card.m:focus-visible .ph{transform:scale(1.08)}
@@ -55,7 +57,7 @@ dialog::backdrop{background:rgba(10,10,16,.78);backdrop-filter:blur(4px)}
 .tx p{margin:0;color:var(--ash)}
 footer{padding:40px 0 56px;font-size:12px;letter-spacing:.01em;color:var(--ash);font-weight:480}
 @media (max-width:720px){.dg{grid-template-columns:1fr}.im{min-height:0}.big{max-height:50vh}.card,.note{padding:24px}.tx{padding:24px}}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.card.m:hover{transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.card.m:hover{--lift:0px}}
 .search{width:100%;max-width:480px;font:400 16px var(--body);color:var(--ivory);background:transparent;border:1px solid var(--ivory);border-radius:32px;padding:12px 20px;margin-bottom:16px}
 .search::placeholder{color:var(--ash)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
@@ -183,3 +185,33 @@ legend{font:480 18px var(--display);margin-bottom:12px;padding:0}
 .mt label{display:flex;flex-direction:column;gap:6px;color:var(--ash)}
 .mt input,.mt select{font:400 16px var(--body);color:var(--ivory);background:var(--obsidian);border:1px solid var(--slate);border-radius:12px;padding:10px 12px}
 .mt p{margin:0;color:var(--ash)}
+
+/* ===== Interfaz dinámica ===== */
+@keyframes up{from{opacity:0;transform:translateY(14px)}}
+#asr .card.m{animation:up .5s ease backwards;animation-delay:calc(var(--i,0) * 70ms)}
+
+/* Aviso breve */
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,16px);background:var(--ivory);color:var(--onyx);padding:12px 22px;border-radius:32px;opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease;z-index:20;font-weight:480;box-shadow:0 8px 24px rgba(0,0,0,.35);white-space:nowrap}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* Barra de progreso de lectura */
+.prog{position:fixed;top:0;left:0;right:0;height:3px;background:var(--cobalt);transform-origin:0 50%;transform:scaleX(0);z-index:30}
+
+/* Resaltado de coincidencias en la búsqueda */
+mark{background:rgba(82,102,235,.4);color:inherit;border-radius:4px;padding:0 2px}
+
+/* Fondo animado de la portada */
+.hero .slides{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.hero .slides img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.08);transition:opacity 1.2s ease,transform 5s ease;filter:saturate(.7)}
+.hero .slides img.on{opacity:.28;transform:scale(1)}
+.hero .slides::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,23,33,.2) 0,rgba(23,23,33,.85) 70%,#171721 100%)}
+.hero svg{z-index:1}
+.hero .in{z-index:2}
+html[data-theme=light] .hero .slides img.on{opacity:.35}
+html[data-theme=light] .hero .slides::after{background:linear-gradient(180deg,rgba(245,246,250,.3) 0,rgba(245,246,250,.9) 70%,#f5f6fa 100%)}
+
+/* Contadores de la portada */
+.stats{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin:-56px auto 0;padding:0 24px;position:relative;z-index:3;max-width:1200px}
+.stat{background:var(--graphite);border-radius:12px;padding:22px 32px;min-width:200px;text-align:center}
+.stat b{display:block;font:480 40px var(--display);letter-spacing:.01em}
+.stat span{color:var(--ash);font-size:14px}
