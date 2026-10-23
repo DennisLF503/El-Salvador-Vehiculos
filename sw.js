@@ -1,5 +1,5 @@
 /* Service worker de Autos SV: permite abrir el sitio sin conexión (última versión vista). */
-const CACHE = 'autos-sv-v1';
+const CACHE = 'autos-sv-v2';
 const CORE = [
   'Html/index.html',
   'css/style.css',

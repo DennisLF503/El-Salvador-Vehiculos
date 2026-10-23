@@ -120,4 +120,34 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://dennislf503.github.io/El-Salvador-Vehiculos/Html/consejos.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dennislf503.github.io/El-Salvador-Vehiculos/en/tips.html"/>
   </url>
+  <url>
+    <loc>https://dennislf503.github.io/El-Salvador-Vehiculos/Html/asistente.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dennislf503.github.io/El-Salvador-Vehiculos/Html/asistente.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dennislf503.github.io/El-Salvador-Vehiculos/en/assistant.html"/>
+  </url>
+  <url>
+    <loc>https://dennislf503.github.io/El-Salvador-Vehiculos/en/assistant.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dennislf503.github.io/El-Salvador-Vehiculos/Html/asistente.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dennislf503.github.io/El-Salvador-Vehiculos/en/assistant.html"/>
+  </url>
+  <url>
+    <loc>https://dennislf503.github.io/El-Salvador-Vehiculos/Html/glosario.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dennislf503.github.io/El-Salvador-Vehiculos/Html/glosario.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dennislf503.github.io/El-Salvador-Vehiculos/en/glossary.html"/>
+  </url>
+  <url>
+    <loc>https://dennislf503.github.io/El-Salvador-Vehiculos/en/glossary.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dennislf503.github.io/El-Salvador-Vehiculos/Html/glosario.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dennislf503.github.io/El-Salvador-Vehiculos/en/glossary.html"/>
+  </url>
+  <url>
+    <loc>https://dennislf503.github.io/El-Salvador-Vehiculos/Html/mantenimiento.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dennislf503.github.io/El-Salvador-Vehiculos/Html/mantenimiento.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dennislf503.github.io/El-Salvador-Vehiculos/en/maintenance.html"/>
+  </url>
+  <url>
+    <loc>https://dennislf503.github.io/El-Salvador-Vehiculos/en/maintenance.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dennislf503.github.io/El-Salvador-Vehiculos/Html/mantenimiento.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dennislf503.github.io/El-Salvador-Vehiculos/en/maintenance.html"/>
+  </url>
 </urlset>
