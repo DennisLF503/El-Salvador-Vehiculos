@@ -9,7 +9,8 @@ a{color:inherit}
 .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
 nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;backdrop-filter:blur(12px);background:rgba(23,23,33,.75)}
 nav .wrap{display:flex;gap:16px;align-items:center;padding-top:12px;padding-bottom:12px}
-.brand{font:480 18px var(--display);letter-spacing:.02em;text-decoration:none;white-space:nowrap}
+.brand{font:480 18px var(--display);letter-spacing:.02em;text-decoration:none;white-space:nowrap;display:flex;align-items:center}
+.brand img{display:block;height:46px;width:auto}
 .links{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
 .links a{padding:8px 20px;border-radius:40px;text-decoration:none;white-space:nowrap;transition:background .2s}
 .links a:hover{background:var(--obsidian)}
@@ -70,5 +71,3 @@ footer{padding:40px 0 56px;font-size:12px;letter-spacing:.01em;color:var(--ash);
 
 .ph.ct{object-fit:contain}
 
-/* Marca de agua: logo fijo, centrado y translúcido detrás del contenido */
-body::before{content:"";position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(80vw,760px);aspect-ratio:1562/682;background:url("../img/logo-autos-sv-transparente.png") center/contain no-repeat;opacity:.16;pointer-events:none;z-index:-1}
