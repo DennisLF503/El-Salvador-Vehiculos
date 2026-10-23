@@ -8,7 +8,7 @@ var S=EN?{
  moto:'Motorcycle ',searchPh:'Search by brand or model',noModels:'No models match your search. Try another brand.',
  toDark:'Switch to dark theme',toLight:'Switch to light theme',top:'Back to top',
  choose:'Choose a vehicle',vA:'Vehicle A',vB:'Vehicle B',cat:'Category',
- more:'More photos'
+ more:'More photos',pros:'Strengths',check:'What to check before buying'
 }:{
  close:'Cerrar',about:'Sobre el vehículo',use:'Uso en El Salvador',share:'Compartir por WhatsApp',
  wa:'Mira este vehículo en Autos SV: ',
@@ -16,17 +16,25 @@ var S=EN?{
  moto:'Moto ',searchPh:'Buscar por marca o modelo',noModels:'No hay modelos con esa búsqueda. Prueba con otra marca.',
  toDark:'Cambiar a tema oscuro',toLight:'Cambiar a tema claro',top:'Volver arriba',
  choose:'Elige un vehículo',vA:'Vehículo A',vB:'Vehículo B',cat:'Categoría',
- more:'Más fotos'
+ more:'Más fotos',pros:'Ventajas',check:'Qué revisar antes de comprar'
 };
 /* Fotos adicionales por modelo: { 'Nombre del modelo': ['../img/archivo.jpg', ...] } */
 var EXTRA_PHOTOS={};
 function alt(k){return (/^(Honda|Bajaj|Yamaha|Suzuki)$/.test(k)?S.moto:'')+k}
+function detailHTML(m){
+ var d=(typeof DET!=='undefined'?DET:{})[m[0]];
+ if(!d)return '<h4>'+S.about+'</h4><p>'+m[2]+'</p><h4>'+S.use+'</h4><p>'+m[3]+'</p>';
+ var li=function(t){return '<li>'+esc(t)+'</li>'};
+ return '<h4>'+S.about+'</h4><p>'+d.a+'</p><h4>'+S.use+'</h4><p>'+d.u+'</p>'+
+  '<h4>'+S.pros+'</h4><ul>'+d.v.map(li).join('')+'</ul>'+
+  '<h4>'+S.check+'</h4><ul>'+d.r.map(li).join('')+'</ul>';
+}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function show(m){
  var photos=[F[m[0]]].concat(EXTRA_PHOTOS[m[0]]||[]);
  var thumbs=photos.length>1?'<div class="thumbs" role="group" aria-label="'+S.more+'">'+photos.map(function(p,i){return '<button type="button" class="th" data-src="'+p+'" aria-label="'+S.more+' '+(i+1)+'"><img src="'+p+'" alt=""></button>'}).join('')+'</div>':'';
  var wa='https://wa.me/?text='+encodeURIComponent(S.wa+m[0]+' - '+location.href.split('#')[0]);
- dg.innerHTML='<div class="dg"><div class="im"><img class="big" id="bigimg" alt="'+alt(m[0])+'" src="'+photos[0]+'"></div><div class="tx"><h3>'+m[0]+'</h3><span class="tag">'+m[1]+'</span>'+thumbs+'<h4>'+S.about+'</h4><p>'+m[2]+'</p><h4>'+S.use+'</h4><p>'+m[3]+'</p><div class="acts"><a class="wa" href="'+wa+'" target="_blank" rel="noopener">'+S.share+'</a><button type="button" class="ghost" id="x">'+S.close+'</button></div></div></div>';
+ dg.innerHTML='<div class="dg"><div class="im"><img class="big" id="bigimg" alt="'+alt(m[0])+'" src="'+photos[0]+'"></div><div class="tx"><h3>'+m[0]+'</h3><span class="tag">'+m[1]+'</span>'+thumbs+''+detailHTML(m)+'<div class="acts"><a class="wa" href="'+wa+'" target="_blank" rel="noopener">'+S.share+'</a><button type="button" class="ghost" id="x">'+S.close+'</button></div></div></div>';
  dg.showModal();
  $('#x').onclick=function(){dg.close()};
  document.querySelectorAll('.th').forEach(function(b){b.onclick=function(){$('#bigimg').src=b.getAttribute('data-src')}});
@@ -55,7 +63,7 @@ if(pg==='comparar'||pg==='compare'){
  var sa=$('#ca'),sb=$('#cb'),out=$('#cmp');
  all.forEach(function(x,idx){[sa,sb].forEach(function(s){var o=document.createElement('option');o.value=idx;o.textContent=x.m[0]+' ('+x.cat+')';s.appendChild(o)})});
  sa.value='0';sb.value='1';
- var card=function(x,label){return '<div class="card cmpc"><p class="lbl">'+label+'</p><div class="pw"><img class="ph'+(T[x.m[0]]?' ct':'')+'" alt="'+alt(x.m[0])+'" src="'+F[x.m[0]]+'"></div><h3>'+x.m[0]+'</h3><span class="tag">'+x.cat+'</span><h4>'+S.cat+'</h4><p>'+x.m[1]+'</p><h4>'+S.about+'</h4><p>'+x.m[2]+'</p><h4>'+S.use+'</h4><p>'+x.m[3]+'</p></div>'};
+ var card=function(x,label){return '<div class="card cmpc"><p class="lbl">'+label+'</p><div class="pw"><img class="ph'+(T[x.m[0]]?' ct':'')+'" alt="'+alt(x.m[0])+'" src="'+F[x.m[0]]+'"></div><h3>'+x.m[0]+'</h3><span class="tag">'+x.cat+'</span><h4>'+S.cat+'</h4><p>'+x.m[1]+'</p>'+detailHTML(x.m)+'</div>'};
  var drawCmp=function(){out.innerHTML=card(all[+sa.value],S.vA)+card(all[+sb.value],S.vB)};
  sa.onchange=drawCmp;sb.onchange=drawCmp;drawCmp();
 }

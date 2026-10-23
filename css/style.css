@@ -123,3 +123,7 @@ details.faq p{margin:12px 0 0;color:var(--ash)}
 .links .lang{padding:0;width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--ivory);font:480 13px var(--body);text-decoration:none;flex:none}
 .links .lang:hover{background:var(--obsidian)}
 .links a{padding:8px 14px}
+
+/* Detalle ampliado de cada vehículo */
+.tx ul,.cmpc ul{margin:0;padding-left:20px;color:var(--ash)}
+.tx li,.cmpc li{margin-bottom:6px}
