@@ -93,3 +93,33 @@ html[data-theme=light] .hero{background:radial-gradient(ellipse 80% 50% at 50% 1
 html[data-theme=light] .hero svg path:first-child{fill:#dfe2f0}
 html[data-theme=light] .hero svg path:last-child{fill:#cdd1e4}
 html[data-theme=light] .card.m:hover,html[data-theme=light] .card.m:focus-visible{background:var(--obsidian)}
+
+/* Compartir por WhatsApp y galería en la ficha */
+.acts{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:24px}
+.acts .ghost{margin-top:0}
+.wa{display:inline-block;padding:12px 22px;border-radius:32px;background:#25d366;color:#0b1f12;text-decoration:none;font-weight:480}
+.wa:hover{filter:brightness(1.08)}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 4px}
+.th{padding:0;border:2px solid transparent;border-radius:8px;background:var(--obsidian);cursor:pointer;width:72px;height:52px;overflow:hidden}
+.th:hover,.th:focus-visible{border-color:var(--ivory)}
+.th img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* Comparador */
+.pick{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.pick label{display:flex;flex-direction:column;gap:8px;flex:1;min-width:240px;color:var(--ash)}
+.pick select{font:400 16px var(--body);color:var(--ivory);background:var(--graphite);border:1px solid var(--slate);border-radius:12px;padding:12px 14px}
+.cmpc .lbl{font-size:12px;letter-spacing:.04em;color:var(--ash);margin:0 0 12px;text-transform:uppercase}
+.cmpc h4{font-size:16px;margin:20px 0 4px}
+
+/* Preguntas frecuentes */
+details.faq{background:var(--graphite);border-radius:12px;padding:20px 24px;margin-bottom:12px}
+details.faq summary{cursor:pointer;font:480 18px var(--display);list-style:none}
+details.faq summary::-webkit-details-marker{display:none}
+details.faq summary::after{content:"+";float:right;font-size:22px;line-height:1;color:var(--ash)}
+details.faq[open] summary::after{content:"-"}
+details.faq p{margin:12px 0 0;color:var(--ash)}
+
+/* Cambio de idioma */
+.links .lang{padding:0;width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--ivory);font:480 13px var(--body);text-decoration:none;flex:none}
+.links .lang:hover{background:var(--obsidian)}
+.links a{padding:8px 14px}
