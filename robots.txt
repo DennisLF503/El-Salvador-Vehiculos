@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dennislf503.github.io/El-Salvador-Vehiculos/sitemap.xml
