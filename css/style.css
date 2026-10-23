@@ -127,3 +127,24 @@ details.faq p{margin:12px 0 0;color:var(--ash)}
 /* Detalle ampliado de cada vehículo */
 .tx ul,.cmpc ul{margin:0;padding-left:20px;color:var(--ash)}
 .tx li,.cmpc li{margin-bottom:6px}
+
+/* Accesibilidad: saltar al contenido */
+.skip{position:absolute;left:12px;top:-80px;z-index:10;background:var(--ivory);color:var(--onyx);padding:10px 16px;border-radius:24px;text-decoration:none;font-weight:480}
+.skip:focus{top:12px}
+
+/* Favoritos: botón en la ficha activo */
+.fav[aria-pressed=true]{background:var(--ivory);color:var(--onyx)}
+
+/* Modo de impresión: solo la ficha, sin fondo oscuro */
+@media print{
+ body>*:not(dialog){display:none!important}
+ body{background:#fff!important}
+ dialog[open]{display:block!important;position:static;width:100%;max-width:none;max-height:none;overflow:visible;border:0;box-shadow:none;background:#fff;color:#000;animation:none}
+ dialog .dg{display:block}
+ dialog .im{background:#fff;min-height:0}
+ dialog .big{max-height:none}
+ dialog .tx{max-height:none;overflow:visible;color:#000}
+ dialog .tx h3,dialog .tx h4,dialog .tx p,dialog .tx li{color:#000}
+ dialog .tag{border-color:#000;color:#000}
+ dialog .acts,dialog .thumbs{display:none!important}
+}
