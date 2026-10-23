@@ -8,7 +8,7 @@ var S=EN?{
  moto:'Motorcycle ',searchPh:'Search by brand or model',noModels:'No models match your search. Try another brand.',
  toDark:'Switch to dark theme',toLight:'Switch to light theme',top:'Back to top',
  choose:'Choose a vehicle',vA:'Vehicle A',vB:'Vehicle B',cat:'Category',
- more:'More photos',pros:'Strengths',check:'What to check before buying'
+ more:'More photos',pros:'Strengths',check:'What to check before buying',favOn:'Remove from favorites',favOff:'Save to favorites',print:'Print',favChip:'Favorites',favNone:'You have no favorites yet. Open a vehicle and tap "Save to favorites".'
 }:{
  close:'Cerrar',about:'Sobre el vehículo',use:'Uso en El Salvador',share:'Compartir por WhatsApp',
  wa:'Mira este vehículo en Autos SV: ',
@@ -16,7 +16,7 @@ var S=EN?{
  moto:'Moto ',searchPh:'Buscar por marca o modelo',noModels:'No hay modelos con esa búsqueda. Prueba con otra marca.',
  toDark:'Cambiar a tema oscuro',toLight:'Cambiar a tema claro',top:'Volver arriba',
  choose:'Elige un vehículo',vA:'Vehículo A',vB:'Vehículo B',cat:'Categoría',
- more:'Más fotos',pros:'Ventajas',check:'Qué revisar antes de comprar'
+ more:'Más fotos',pros:'Ventajas',check:'Qué revisar antes de comprar',favOn:'Quitar de favoritos',favOff:'Guardar en favoritos',print:'Imprimir',favChip:'Favoritos',favNone:'Aún no tienes favoritos. Abre una ficha y toca "Guardar en favoritos".'
 };
 /* Fotos adicionales por modelo: { 'Nombre del modelo': ['../img/archivo.jpg', ...] } */
 var EXTRA_PHOTOS={};
@@ -29,14 +29,22 @@ function detailHTML(m){
   '<h4>'+S.pros+'</h4><ul>'+d.v.map(li).join('')+'</ul>'+
   '<h4>'+S.check+'</h4><ul>'+d.r.map(li).join('')+'</ul>';
 }
+function getFavs(){try{return JSON.parse(localStorage.getItem('favs')||'[]')}catch(e){return []}}
+function isFav(n){return getFavs().indexOf(n)>-1}
+function toggleFav(n){var f=getFavs(),i=f.indexOf(n);if(i>-1)f.splice(i,1);else f.push(n);try{localStorage.setItem('favs',JSON.stringify(f))}catch(e){}}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function show(m){
  var photos=[F[m[0]]].concat(EXTRA_PHOTOS[m[0]]||[]);
  var thumbs=photos.length>1?'<div class="thumbs" role="group" aria-label="'+S.more+'">'+photos.map(function(p,i){return '<button type="button" class="th" data-src="'+p+'" aria-label="'+S.more+' '+(i+1)+'"><img src="'+p+'" alt=""></button>'}).join('')+'</div>':'';
  var wa='https://wa.me/?text='+encodeURIComponent(S.wa+m[0]+' - '+location.href.split('#')[0]);
- dg.innerHTML='<div class="dg"><div class="im"><img class="big" id="bigimg" alt="'+alt(m[0])+'" src="'+photos[0]+'"></div><div class="tx"><h3>'+m[0]+'</h3><span class="tag">'+m[1]+'</span>'+thumbs+''+detailHTML(m)+'<div class="acts"><a class="wa" href="'+wa+'" target="_blank" rel="noopener">'+S.share+'</a><button type="button" class="ghost" id="x">'+S.close+'</button></div></div></div>';
+ dg.innerHTML='<div class="dg"><div class="im"><img class="big" id="bigimg" alt="'+alt(m[0])+'" src="'+photos[0]+'"></div><div class="tx"><h3>'+m[0]+'</h3><span class="tag">'+m[1]+'</span>'+thumbs+''+detailHTML(m)+'<div class="acts"><a class="wa" href="'+wa+'" target="_blank" rel="noopener">'+S.share+'</a><button type="button" class="ghost" id="fv" aria-pressed="false"></button><button type="button" class="ghost" id="pr">'+S.print+'</button><button type="button" class="ghost" id="x">'+S.close+'</button></div></div></div>';
  dg.showModal();
  $('#x').onclick=function(){dg.close()};
+ var fv=$('#fv');
+ var paintFav=function(){var on=isFav(m[0]);fv.textContent=on?S.favOn:S.favOff;fv.setAttribute('aria-pressed',on?'true':'false')};
+ fv.onclick=function(){toggleFav(m[0]);paintFav();if(pg==='buscar')draw()};
+ paintFav();
+ $('#pr').onclick=function(){window.print()};
  document.querySelectorAll('.th').forEach(function(b){b.onclick=function(){$('#bigimg').src=b.getAttribute('data-src')}});
 }
 dg.addEventListener('click',function(e){if(e.target===dg)dg.close()});
@@ -51,10 +59,11 @@ var brand=function(n){return BR[n]||(/^Blue Bird/.test(n)?'Blue Bird':n.split(' 
 var L=[],q='',bf=ALL,res=$('#res'),ch=$('#chips'),inp=$('#q'),cnt=$('#cnt');
 Object.keys(C).forEach(function(k){C[k].m.forEach(function(m){L.push({m:m,c:C[k].t,b:brand(m[0])})})});
 var bs=[ALL];L.forEach(function(x){if(bs.indexOf(x.b)<0)bs.push(x.b)});bs=[ALL].concat(bs.slice(1).sort(function(p,q){return p===OTHER?1:q===OTHER?-1:p.localeCompare(q)}));
+bs.splice(1,0,S.favChip);
 bs.forEach(function(b){var e=document.createElement('button');e.type='button';e.textContent=b;e.setAttribute('aria-pressed',b===bf);e.onclick=function(){bf=b;Array.prototype.forEach.call(ch.children,function(c){c.setAttribute('aria-pressed',c.textContent===bf)});draw()};ch.appendChild(e)});
 function draw(){res.innerHTML='';var n=0;
-L.forEach(function(x){if((bf===ALL||x.b===bf)&&nz(x.m[0]+' '+x.m[1]+' '+x.c).indexOf(q)>-1){n++;var e=document.createElement('button');e.type='button';e.className='card m';e.innerHTML='<div class="pw"><img class="ph'+(T[x.m[0]]?' ct':'')+'" alt="'+alt(x.m[0])+'" src="'+F[x.m[0]]+'"></div><h3>'+x.m[0]+'</h3><p>'+x.m[1]+'</p><span class="tag">'+x.c+'</span>';e.onclick=function(){show(x.m)};res.appendChild(e)}});
-cnt.textContent=n?(n+' '+(n===1?S.one:S.many)):S.none}
+L.forEach(function(x){if((bf===ALL||(bf===S.favChip?isFav(x.m[0]):x.b===bf))&&nz(x.m[0]+' '+x.m[1]+' '+x.c).indexOf(q)>-1){n++;var e=document.createElement('button');e.type='button';e.className='card m';e.innerHTML='<div class="pw"><img class="ph'+(T[x.m[0]]?' ct':'')+'" alt="'+alt(x.m[0])+'" src="'+F[x.m[0]]+'"></div><h3>'+x.m[0]+'</h3><p>'+x.m[1]+'</p><span class="tag">'+x.c+'</span>';e.onclick=function(){show(x.m)};res.appendChild(e)}});
+cnt.textContent=n?(n+' '+(n===1?S.one:S.many)):(bf===S.favChip?S.favNone:S.none)}
 inp.addEventListener('input',function(){q=nz(inp.value.trim());draw()});draw()}
 
 /* Comparador de dos vehículos */
