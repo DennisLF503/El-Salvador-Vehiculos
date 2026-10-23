@@ -14,10 +14,12 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="../img/favicon.png">
+<script>try{if(localStorage.getItem('theme')==='light')document.documentElement.dataset.theme='light'}catch(e){}</script>
 <link rel="stylesheet" href="../css/style.css">
 </head>
 <body data-page="inicio">
-<nav><div class="wrap"><a class="brand" href="index.html">Autos SV</a><div class="links"><a href="index.html" aria-current="page">Inicio</a><a href="pickups.html">Pickups</a><a href="sedanes.html">Sedanes</a><a href="suv.html">SUV</a><a href="motos.html">Motos</a><a href="buses.html">Buses</a><a href="pesado.html">Pesado</a><a href="bicicletas.html">Bicicletas</a><a href="buscar.html">Buscar</a><a href="acerca.html">Acerca de</a></div></div></nav>
+<nav><div class="wrap"><a class="brand" href="index.html"><img src="../img/logo-autos-sv-nav.png" alt="Autos SV" width="105" height="46"></a><div class="links"><a href="index.html" aria-current="page">Inicio</a><a href="pickups.html">Pickups</a><a href="sedanes.html">Sedanes</a><a href="suv.html">SUV</a><a href="motos.html">Motos</a><a href="buses.html">Buses</a><a href="pesado.html">Pesado</a><a href="bicicletas.html">Bicicletas</a><a href="buscar.html">Buscar</a><a href="acerca.html">Acerca de</a><a class="sn" href="https://www.instagram.com/df_lf503._/" target="_blank" rel="noopener" aria-label="Instagram de Dennis Fuentes"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a></div><button type="button" class="theme" id="tg" aria-label="Cambiar tema"></button></div></nav>
 <main>
 <div class="page on" id="inicio">
 <header class="hero">
@@ -27,15 +29,22 @@
 <a class="btn" href="pickups.html">Empezar con las pickups</a></div>
 </header>
 <div class="wrap">
+<section class="s"><h2>Modelos más vistos en la calle</h2><p class="lead">Una muestra de los que más se repiten. Toca uno para ver su categoría completa.</p>
+<div class="grid">
+<a class="card m" href="pickups.html"><div class="pw"><img class="ph" alt="Toyota Hilux" src="../img/toyota-hilux.jpg"></div><h3>Toyota Hilux</h3><p>Resistente, con repuestos en todo el país.</p></a>
+<a class="card m" href="sedanes.html"><div class="pw"><img class="ph" alt="Toyota Corolla" src="../img/toyota-corolla.jpg"></div><h3>Toyota Corolla</h3><p>El sedán más reconocido; muy buena reventa.</p></a>
+<a class="card m" href="suv.html"><div class="pw"><img class="ph" alt="Honda CR-V" src="../img/honda-cr-v.jpg"></div><h3>Honda CR-V</h3><p>Espacio y altura libre.</p></a>
+<a class="card m" href="buses.html"><div class="pw"><img class="ph" alt="Toyota Coaster" src="../img/toyota-coaster.jpg"></div><h3>Toyota Coaster</h3><p>Transporte colectivo.</p></a>
+</div></section>
 <section class="s"><h2>Explora por tipo de vehículo</h2><p class="lead">Cada categoría tiene su propia página.</p>
 <div class="grid">
-<a class="card m" href="pickups.html"><div class="pw"><img class="ph" alt="Toyota Hilux" src="../img/toyota-hilux.jpg"></div><h3>Pickups</h3><p>Trabajo, campo y carga.</p></a>
-<a class="card m" href="sedanes.html"><div class="pw"><img class="ph" alt="Toyota Corolla" src="../img/toyota-corolla.jpg"></div><h3>Sedanes y compactos</h3><p>Ciudad, familia y trabajo diario.</p></a>
-<a class="card m" href="suv.html"><div class="pw"><img class="ph" alt="Honda CR-V" src="../img/honda-cr-v.jpg"></div><h3>SUV</h3><p>Espacio y altura libre.</p></a>
-<a class="card m" href="motos.html"><div class="pw"><img class="ph" alt="Honda" src="../img/moto-honda.jpg"></div><h3>Motos</h3><p>Transporte diario y reparto.</p></a>
-<a class="card m" href="buses.html"><div class="pw"><img class="ph" alt="Toyota Coaster" src="../img/toyota-coaster.jpg"></div><h3>Buses y microbuses</h3><p>Transporte colectivo.</p></a>
-<a class="card m" href="pesado.html"><div class="pw"><img class="ph ct" alt="Volquetas" src="../img/volquetas.jpg"></div><h3>Transporte pesado</h3><p>Volquetas y trailers.</p></a>
-<a class="card m" href="bicicletas.html"><div class="pw"><img class="ph ct" alt="Bicicletas" src="../img/bicicletas.jpg"></div><h3>Bicicletas</h3><p>Transporte sencillo y económico.</p></a>
+<a class="card m" href="pickups.html"><div class="pw"><img class="ph" alt="Toyota Hilux" src="../img/toyota-hilux.jpg"></div><h3>Pickups</h3><p>Trabajo, campo y carga.</p><span class="tag">6 modelos</span></a>
+<a class="card m" href="sedanes.html"><div class="pw"><img class="ph" alt="Toyota Corolla" src="../img/toyota-corolla.jpg"></div><h3>Sedanes y compactos</h3><p>Ciudad, familia y trabajo diario.</p><span class="tag">8 modelos</span></a>
+<a class="card m" href="suv.html"><div class="pw"><img class="ph" alt="Honda CR-V" src="../img/honda-cr-v.jpg"></div><h3>SUV</h3><p>Espacio y altura libre.</p><span class="tag">5 modelos</span></a>
+<a class="card m" href="motos.html"><div class="pw"><img class="ph" alt="Honda" src="../img/moto-honda.jpg"></div><h3>Motos</h3><p>Transporte diario y reparto.</p><span class="tag">7 modelos</span></a>
+<a class="card m" href="buses.html"><div class="pw"><img class="ph" alt="Toyota Coaster" src="../img/toyota-coaster.jpg"></div><h3>Buses y microbuses</h3><p>Transporte colectivo.</p><span class="tag">4 modelos</span></a>
+<a class="card m" href="pesado.html"><div class="pw"><img class="ph ct" alt="Volquetas" src="../img/volquetas.jpg"></div><h3>Transporte pesado</h3><p>Volquetas y trailers.</p><span class="tag">2 modelos</span></a>
+<a class="card m" href="bicicletas.html"><div class="pw"><img class="ph ct" alt="Bicicletas" src="../img/bicicletas.jpg"></div><h3>Bicicletas</h3><p>Transporte sencillo y económico.</p><span class="tag">1 modelos</span></a>
 </div></section>
 <section class="s"><h2>Tres grupos de marcas dominan la calle</h2><p class="lead">Predomina la marca japonesa, con coreanas cada vez más presentes y una gran oferta de usados importados.</p>
 <div class="grid">
